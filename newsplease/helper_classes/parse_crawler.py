@@ -33,6 +33,8 @@ class ParseCrawler(object):
         Responsible for passing a NewscrawlerItem to the pipeline if the
         response contains an article.
 
+        MODIFIED: now needs to also have original url as prefix
+
         :param obj response: the scrapy response to work on
         :param str source_domain: the response's domain as set for the crawler
         :param str original_url: the url set in the json file
@@ -40,6 +42,7 @@ class ParseCrawler(object):
         :return NewscrawlerItem: NewscrawlerItem to pass to the pipeline
         """
         if self.helper.heuristics.is_article(response, original_url):
+            print("IS ARTICLE")
             return self.pass_to_pipeline(
                 response, source_domain, rss_title=None)
 
@@ -84,7 +87,7 @@ class ParseCrawler(object):
 
     @staticmethod
     def recursive_requests(response, spider, ignore_regex='',
-                           ignore_file_extensions='pdf'):
+                           ignore_file_extensions='pdf', allowed_prefixes = None):
         """
         Manages recursive requests.
         Determines urls to recursivly crawl if they do not match certain file
@@ -100,13 +103,24 @@ class ParseCrawler(object):
         """
         # Recursivly crawl all URLs on the current page
         # that do not point to irrelevant file types
-        # or contain any of the given ignore_regex regexes
+        # or contain any of the given ignore_regex regexes]
+
+        # ans = []
+        # for href in response.css("a::attr('href')").extract():
+        #     new_url = response.urljoin(href)
+        #     if self.helper.heuristics.should_search_url(new_url, site) and re.match(
+        #         r'.*\.' + ignore_file_extensions +
+        #         r'$', response.urljoin(href), re.IGNORECASE
+        #     ) is None and (not re.match(ignore_regex, response.urljoin(href))):
+        #         ans.append(scrapy.Request(response.urljoin(href), callback=spider.parse))
+
         return [
             scrapy.Request(response.urljoin(href), callback=spider.parse)
             for href in response.css("a::attr('href')").extract() if re.match(
                 r'.*\.' + ignore_file_extensions +
                 r'$', response.urljoin(href), re.IGNORECASE
             ) is None
+            # and (not re.match(ignore_regex, response.urljoin(href))) #(len(re.match(ignore_regex, response.urljoin(href)).group(0)) == 0)
             and len(re.match(ignore_regex, response.urljoin(href)).group(0)) == 0
         ]
 

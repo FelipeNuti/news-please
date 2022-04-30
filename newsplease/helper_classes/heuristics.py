@@ -131,3 +131,30 @@ class Heuristics(HeuristicsManager):
 
         root_url = re.sub(re_url_root, '', site_dict["url"])
         return UrlExtractor.get_allowed_domain(response.url) == root_url
+
+    def restrict_domains_to(self, response, site_dict):
+        """
+        Ensures the response url is nested within the root filepath.
+        E.g. if the root url is website.com/articles, only links starting with 
+        website.com/articles will be scraped
+
+        :param obj response: The scrapy response
+        :param dict site_dict: The site object from the JSON-File
+
+        :return bool: Determines if the response's url has the root as a prefix
+        """
+
+        allowed_domains = site_dict['overwrite_heuristics']['restrict_domains_to']
+        new_url = response.url
+
+        print("\n")
+        print(new_url)
+        print("\n")
+
+        for pref in allowed_domains:
+            n = len(pref)
+            if new_url[:n] == pref:
+                return True
+        
+        return False
+        

@@ -7,6 +7,7 @@ import json
 import logging
 import os.path
 import sys
+import requests
 
 import pymysql
 import psycopg2
@@ -556,6 +557,26 @@ class JsonFileStorage(ExtractedInformationStorage):
             json.dump(ExtractedInformationStorage.extract_relevant_info(item), file_, ensure_ascii=False)
 
         return item
+
+class GlobalDataPersister(ExtractedInformationStorage):
+    cfg = None
+    db = None
+    db_endpoint = None
+    category = None
+
+    def __init__(self):
+        self.cfg = CrawlerConfig.get_instance()
+        self.db = self.cfg.section("GlobalDataPersister")
+        self.db_endpoint = self.db["db_endpoint"]
+        self.category = self.db["category"]
+
+    def process_item(self, item, spider):
+        info = ExtractedInformationStorage.extract_relevant_info(item)
+        payload = {
+            "texts": [info],
+            "category": self.category
+        }
+        requests.post(self.db_endpoint, json=payload)
 
 
 class ElasticsearchStorage(ExtractedInformationStorage):

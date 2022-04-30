@@ -33,6 +33,21 @@ class HeuristicsManager(object):
         self.log = logging.getLogger(__name__)
         self.crawler_class = crawler_class
 
+    def should_search_url(self, new_url, site):
+        allowed_urls = site['overwrite_heuristics']['restrict_domains_to']
+
+        print("\n")
+        print(new_url)
+        print("\n")
+
+        for pref in allowed_urls:
+            n = len(pref)
+            if new_url[:n] == pref:
+                return True
+        
+        return False
+
+
     def is_article(self, response, url):
         """
         Tests if the given response is an article by calling and checking
@@ -65,6 +80,24 @@ class HeuristicsManager(object):
         is_article = eval(statement)
         self.log.debug("Article accepted: %s", is_article)
         return is_article
+    
+    # def is_same_prefix(self, new_url, base_url):
+    #     """
+    #     Tests if the given response is an article by calling and checking
+    #     the heuristics set in config.cfg and sitelist.json
+
+    #     :param obj response: The response of the site.
+    #     :param str url: The base_url (needed to get the site-specific config
+    #                     from the JSON-file)
+    #     :return bool: true if the heuristics match the site as an article
+    #     """
+    #     n = len(base_url)
+        
+
+    #     print("\n\n################# "+new_url[:n])
+    #     print("################# "+base_url+"\n\n")
+
+    #     return new_url[:n] == base_url
 
     def __get_condition(self, url):
         """
@@ -241,5 +274,7 @@ class HeuristicsManager(object):
         self.log.debug(
             "Enabled heuristics for %s: %s", site["url"], heuristics
         )
+
+        print(heuristics)
 
         return heuristics

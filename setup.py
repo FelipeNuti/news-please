@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
-setup(name='news-please',
+setup(name='news-please-gdpc',
       version='1.5.22',
-      description="news-please is an open source easy-to-use news extractor that just works.",
+      description="news-please is an open source easy-to-use news extractor that just works. [Modified for Global Data Persistor and Collector Project]",
       long_description="""\
 news-please is an open source, easy-to-use news crawler that extracts structured information from almost any news website. It can follow recursively internal hyperlinks and read RSS feeds to fetch both most recent and also old, archived articles. You only need to provide the root URL of the news website. Furthermore, its API allows developers to access the exctraction functionality within their software. news-please also implements a workflow optimized for the news archive provided by commoncrawl.org, allowing users to efficiently crawl and extract news articles including various filter options.""",
       classifiers=[
@@ -23,8 +23,8 @@ news-please is an open source, easy-to-use news crawler that extracts structured
       keywords='news crawler news scraper news extractor crawler extractor scraper information retrieval',
       author='Felix Hamborg',
       author_email='felix.hamborg@uni-konstanz.de',
-      url='https://github.com/fhamborg/news-please',
-      download_url='https://github.com/fhamborg/news-please',
+      url='https://github.com/FelipeNuti/news-please',
+      download_url='https://github.com/FelipeNuti/news-please',
       license='Apache License 2.0',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
@@ -59,7 +59,7 @@ news-please is an open source, easy-to-use news crawler that extracts structured
           ]
       },
       entry_points={
-          'console_scripts': ['news-please = newsplease.__main__:main',
-                              'news-please-cc = newsplease.examples.commoncrawl:main']
+          'console_scripts': ['news-please-gdpc = newsplease.__main__:main',
+                              'news-please-gdpc-cc = newsplease.examples.commoncrawl:main']
       },
       )

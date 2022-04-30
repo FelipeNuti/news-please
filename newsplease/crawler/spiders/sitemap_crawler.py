@@ -1,6 +1,7 @@
 import logging
 
 import scrapy
+import pprint
 
 from ...helper_classes.url_extractor import UrlExtractor
 
@@ -30,6 +31,13 @@ class SitemapCrawler(scrapy.spiders.SitemapSpider):
             url, config.section('Crawler')['sitemap_allow_subdomains'])]
 
         self.log.debug(self.sitemap_urls)
+
+        pp = pprint.PrettyPrinter(depth=4)
+        print("\n CONFIG OF THE SCRAPER")
+        print(pp.pprint(self.config.__dict__))
+
+        print("\n HELPER OF THE SCRAPER")
+        print(pp.pprint(self.helper.heuristics.__dict__))
 
         super(SitemapCrawler, self).__init__(*args, **kwargs)
 
