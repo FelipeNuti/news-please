@@ -36,6 +36,9 @@ class HeuristicsManager(object):
     def should_search_url(self, new_url, site):
         allowed_urls = site['overwrite_heuristics']['restrict_domains_to']
 
+        if len(allowed_urls) == 0:
+            return True
+
         print("\n")
         print(new_url)
         print("\n")

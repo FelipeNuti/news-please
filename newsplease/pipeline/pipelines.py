@@ -570,13 +570,16 @@ class GlobalDataPersister(ExtractedInformationStorage):
         self.db_endpoint = self.db["db_endpoint"]
         self.category = self.db["category"]
 
+    def __push_to_db(self, payload):
+        requests.post(self.db_endpoint, json=payload)
+
     def process_item(self, item, spider):
         info = ExtractedInformationStorage.extract_relevant_info(item)
         payload = {
             "texts": [info],
             "category": self.category
         }
-        requests.post(self.db_endpoint, json=payload)
+        self.__push_to_db(payload)
 
 
 class ElasticsearchStorage(ExtractedInformationStorage):

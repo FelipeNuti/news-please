@@ -147,6 +147,9 @@ class Heuristics(HeuristicsManager):
         allowed_domains = site_dict['overwrite_heuristics']['restrict_domains_to']
         new_url = response.url
 
+        if len(allowed_domains) == 0:
+            return True
+
         print("\n")
         print(new_url)
         print("\n")
